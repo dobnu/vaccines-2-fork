@@ -4,7 +4,7 @@
 #This is option 2 for how we could make a gif. 
 #The function actually reads a folder for the images so the user would not have to change anything, but its important that the files are named correctly when they are saved/created
 
-import imageio as iio
+import imageio.v2 as iio
 import os
 
 def create_gif(filename_save):
