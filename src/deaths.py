@@ -95,7 +95,7 @@ def create_death_number_JHU():
     months=pd.read_csv("months.csv")
     months=months.date.to_list()
 
-    start = "05-01-2021"
+    start = months[0][:2] + "-01-" + months[6:] #Could be a problem if no data for this particular date
     ends = months
     
     for end in ends:

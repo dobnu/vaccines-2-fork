@@ -1,0 +1,9 @@
+name: vaxenv
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - seaborn
+prefix: /Users/dan/opt/anaconda3/envs/vaxenv
