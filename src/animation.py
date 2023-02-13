@@ -15,12 +15,24 @@ def create_gif(filename_save):
     #makes a list of im NumPy arrays based on a list of .png images (read from folder)
     images = list()
 
+    dates_dict = {f"{filename[6:10]}-{filename[0:2]}" : filename for filename in os.listdir('img') if ('.png' in filename and 'comparison' not in filename)}
+
+    dates_sorted = dict(sorted(dates_dict.items()))
+    
+
+    for date in dates_sorted:
+        f = os.path.join('img' , dates_dict[date] )
+        im = iio.imread(f)
+        images.append(im)
+    """
     #this part looks at the img directory and reads in all the files that end with .png (only going to bring in those)
-    for filename in sorted(os.listdir('img')):
+    for filename in sorted(os.listdir('img'):
+
         if filename[-4:] == '.png' and not filename == 'comparison.png':
             f = os.path.join('img',filename)
             im = iio.imread(f)
             images.append(im)
+    """
 
     #making the gif from the pngs
     iio.mimsave(filename_save,images,duration = 1)

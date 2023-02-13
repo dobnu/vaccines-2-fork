@@ -67,7 +67,6 @@ def create_scatters():
     months = pd.read_csv("months.csv")
     dates = months.date.to_list()
     for date in dates:
-        print(date)
         scatter(date)
 
 if __name__ == "__main__":
