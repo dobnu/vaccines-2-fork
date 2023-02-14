@@ -3,33 +3,46 @@ import pandas as pd
 import numpy as np
 from collections import defaultdict
 import sys
+import seaborn as sns
 
 def fips_to_name(FIPS):
     map = defaultdict(lambda: FIPS)
     map.update({
         '44003': 'Kent County, RI',
         '01125': 'Tuscaloosa County, AL',
-        '23005': 'Cumberland County, ME'
     })
     return map[FIPS]
 
 def comparison(FIPS_1='44003', FIPS_2='01125'):
-    months = {
-        'May':'05-31-2021',
-        'June':'06-30-2021',
-        'July':'07-31-2021',
-        'August':'08-31-2021',
-        'September':'09-30-2021',
-        'October':'10-31-2021',
-        'November':'11-30-2021'
-        }
+    months_df = pd.read_csv("months.csv")
+    months_list = months_df.date.to_list()
+
     file_list = []
-    for month, csv_date in months.items():
-        df = pd.read_csv('data/Merge/vaccinations-and-deaths-' + csv_date +'.csv', converters={'FIPS' : str})
+    for month in months_list:
+        df = pd.read_csv('data/Merge/vaccinations-and-deaths-' + month +'.csv', converters={'FIPS' : str})
         df['Deaths_Per_1e5'] = df['Deaths'] / df['Census2019_18PlusPop'] * 1e5
         df['Month'] = month
         file_list.append(df)
+
+
     merged_df = pd.concat(file_list)
+    
+    Kent = merged_df[ merged_df['FIPS'] == '44003']
+    Kent_graph = Kent.loc[: , ['FIPS', "Deaths_Per_1e5", "Month"]]
+
+    Tuscaloosa = merged_df[ merged_df['FIPS'] == '01125']
+    Tuscaloosa_graph = Tuscaloosa.loc[: , ['FIPS', "Deaths_Per_1e5", "Month"]]
+
+
+    graph_df = pd.concat([Kent_graph, Tuscaloosa_graph], ignore_index = True)
+    plot = sns.catplot(x= "Month", y="Deaths_Per_1e5", hue = 'FIPS', data = graph_df, kind = 'bar')
+    plot.set_axis_labels("Months (May 2021 - Dec 2022)", "COVID Deaths (per 100k)")
+    plot.set_xticklabels("MJJASONDJFMAMJJASOND")
+    plot.set
+    plt.show(plot)
+
+
+    """
     cleaned_df = merged_df[merged_df['FIPS'].str.contains(FIPS_1+"|"+FIPS_2)]
 
     FIPS_1_name = fips_to_name(FIPS_1)
@@ -68,6 +81,7 @@ def comparison(FIPS_1='44003', FIPS_2='01125'):
     handles_2.extend(handles_1) # adds the list items from handles_1 to handles_2
     ax2.legend(handles = handles_2, loc='upper left')
     fig.savefig("img/comparison.png")
+    """
 
 def main(argv):
     comparison(argv[0], argv[1])
