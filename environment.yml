@@ -6,4 +6,5 @@ dependencies:
   - python
   - pandas
   - seaborn
+  - matplotlib
 prefix: /Users/dan/opt/anaconda3/envs/vaxenv

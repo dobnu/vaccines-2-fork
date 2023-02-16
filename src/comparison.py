@@ -35,11 +35,14 @@ def comparison(FIPS_1='44003', FIPS_2='01125'):
 
 
     graph_df = pd.concat([Kent_graph, Tuscaloosa_graph], ignore_index = True)
-    plot = sns.catplot(x= "Month", y="Deaths_Per_1e5", hue = 'FIPS', data = graph_df, kind = 'bar')
+    plot = sns.catplot(x= "Month", y="Deaths_Per_1e5", hue = 'FIPS', data = graph_df, kind = 'bar', aspect = 2)
     plot.set_axis_labels("Months (May 2021 - Dec 2022)", "COVID Deaths (per 100k)")
-    plot.set_xticklabels("MJJASONDJFMAMJJASOND")
-    plot.set
-    plt.show(plot)
+
+    # new_labels = [(label.get_text()[:3] + label.get_text()[8:]) for label in plot.get_xticklabels()]
+    new_labels = [month[:3] + month[8:] for month in months_list]
+    plot.set_xticklabels(labels = new_labels)
+
+    plot.savefig("img/comp.png")
 
 
     """
